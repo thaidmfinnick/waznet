@@ -1,4 +1,14 @@
 defmodule CecrUnwomen.Fcm.FcmPayload do
+    def create_payload_with_data(:both, token, notification, data) do
+      %{
+        "message" => %{
+          "token" => token,
+          "notification" => notification,
+          "data" => data
+        },
+      }
+    end
+    
     def create_payload(:both, token, notification) do
       %{
         "message" => %{

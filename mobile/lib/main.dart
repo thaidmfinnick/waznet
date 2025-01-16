@@ -1,6 +1,7 @@
 import 'package:cecr_unwomen/features/login/view/login_screen.dart';
 import 'package:cecr_unwomen/features/home/view/home_screen.dart';
 import 'package:cecr_unwomen/service/notification_service.dart';
+import 'package:cecr_unwomen/utils.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -91,7 +92,7 @@ class BlocEntireApp extends StatelessWidget {
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
         if (state.status == AuthenticationStatus.authorized) {
-          return const HomeScreen();
+          return HomeScreen(key: Utils.globalHomeKey);
         } else {
           return const LoginScreen();
         }

@@ -6,7 +6,7 @@ defmodule CecrUnwomen.Workers.FcmWorker do
 
   @url_firebase_messaging "https://fcm.googleapis.com/v1/projects/cecr-unwomen/messages:send"
 
-  def send_firebase_notification(firebase_tokens, notification_field) do
+  def send_firebase_notification(firebase_tokens, notification_field, data \\ %{}) do
     server_firebase_token = GenServer.call(FcmStore, :get_token)
     headers = [{"Authorization", "Bearer #{server_firebase_token}"}]
 
@@ -16,7 +16,13 @@ defmodule CecrUnwomen.Workers.FcmWorker do
 
     Enum.each(firebase_tokens, fn t ->
       token = t["token"]
-      payload = FcmPayload.create_payload(:both, token, notification_field)
+      # payload = FcmPayload.create_payload(:both, token, notification_field)
+      payload = cond do 
+        data == %{} ->  FcmPayload.create_payload(:both, token, notification_field)
+        true ->  
+          data_valid = data |> Map.new(fn {k, v} -> {k, to_string(v)}  end)
+          FcmPayload.create_payload_with_data(:both, token, notification_field, data_valid)
+      end
       # payload = cond do
       #   t["platform"] == "android" -> FcmPayload.create_payload(:android, token, data_android_string)
       #   t["platform"] == "ios" && apns_custom_field != nil -> FcmPayload.create_payload(:ios_custom, token, data_ios_string, apns_custom_field)

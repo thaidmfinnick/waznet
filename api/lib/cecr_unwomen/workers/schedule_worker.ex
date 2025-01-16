@@ -44,6 +44,10 @@ defmodule CecrUnwomen.Workers.ScheduleWorker do
               %{
                 "title" => "Nhập dữ liệu ngày #{local_time_string}",
                 "body" => "Bạn chưa nhập dữ liệu cho hôm nay. Ấn vào thông báo để tiến hành nhập liệu."
+              },
+              %{
+                "type" => "remind_to_contribute",
+                "role_id" => role_id
               }
             )
           end

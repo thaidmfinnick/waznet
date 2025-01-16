@@ -27,10 +27,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   final ColorConstants colorCons = ColorConstants();
   final ScrollController _scrollControllerHome = ScrollController();
   bool isHouseholdTab = true;
@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Utils.checkUpdateApp(context);
+    Utils.globalContext = context;
     final User? user = context.read<AuthenticationBloc>().state.user;
     if (user == null) return;
     isHouseholdTab = user.roleId != 3;
@@ -213,14 +214,10 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: roleId != 1 && _currentIndex == 0 ? FloatingActionButton(
         shape: const CircleBorder(),
         onPressed: () async {          
-          setState(() {
-            needGetDataChart = false;
-          });
+          needGetDataChart = true;
           final bool? shouldCallApi = await Navigator.push(context, MaterialPageRoute(builder: (context) => ContributionScreen(roleId: roleId)));
+          needGetDataChart = false;
           if (!(shouldCallApi ?? false)) return;
-          setState(() {
-            needGetDataChart = true;
-          });
           callApiGetOverallData();
         },
         backgroundColor: const Color(0xFF4CAF50),

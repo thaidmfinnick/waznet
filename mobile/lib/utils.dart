@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cecr_unwomen/constants/color_constants.dart';
+import 'package:cecr_unwomen/features/home/view/home_screen.dart';
 import 'package:cecr_unwomen/secrets.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,6 +16,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
+  static BuildContext? globalContext;
+  static GlobalKey<HomeScreenState> globalHomeKey = GlobalKey<HomeScreenState>();
+
   static Future<String?> getFirebaseToken() async {
     final String? fcmToken = await FirebaseMessaging.instance.getToken();
     return fcmToken;
